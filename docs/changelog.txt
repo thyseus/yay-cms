@@ -1,0 +1,7 @@
+0.6 (to be released) 
+
+- yay-cms moved to Github
+- added 'preview mode' to sitecontent admin
+
+0.5 
+- start of changelog

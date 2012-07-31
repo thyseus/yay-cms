@@ -118,6 +118,7 @@ class SitecontentController extends Controller
 	{
 		$model = $this->loadContent();
 
+		// is this page a redirection?
 		if($model->visible == 4 && $model->redirect !== null) 
 			$this->redirect($model->redirectUrl());
 
@@ -395,7 +396,7 @@ class SitecontentController extends Controller
 	{
 		if($this->_model===null)
 		{
-			if(isset($_GET['id']) && is_array(@$_GET['id']))
+			if(isset($_GET['id']) && is_array($_GET['id']))
 				$this->_model = Sitecontent::model()->find(
 						'id = :id and language = :language',  array(
 							':id' => $_GET['id']['id'],
