@@ -1,0 +1,67 @@
+How to install this Content Management Module in your Yii application:
+
+1.) Extract the archive into your protected/modules folder.
+
+2.) Import the docs/schema_mysql.sql to the mysql Database that your 
+Application runs. Only one table, called 'sitecontent', will be inserted.
+
+$ mysql -u root -p < docs/schema_mysql.sql -D database_name
+
+Add the module to your application Configuration.
+[...]
+'modules' => array(
+		'cms' => array(
+			'languages' => array('en', 'de') // <-- languages you want to allow 
+			)
+		),
+[...]
+
+If you want to use the layout of your existing Web Application, set the layout
+to an empty string, or null: 
+
+		'layout' => null,
+
+Otherwise an lightweight default layout of the cms will be used.
+
+Administrate your Content by using
+http://app/index.php?r=cms/sitecontent/admin
+
+or, when using a Route configuration, possibly
+
+http://app/index.php/cms/sitecontent/admin
+
+Please not that a 'sitecontent'-entry acts as a sitecontent as well as a
+menu point.
+
+In order to let your Application render the content at appropriate places,
+do is like this:
+
+// This will render a <ul><li>-based Menu containing all child elements of
+// the menu points.
+Cms::renderMenuPoints($id_of_the_sitecontent_page); 
+
+Use Cms::render($page, $language) to render sitecontent everywhere you want
+in your views, models or controllers:
+
+// render sitecontent page 3
+<? echo Cms::render(3); ?>
+
+// render sitecontent page with the url_title footer
+<? echo Cms::render('footer'); ?>
+
+// render sitecontent page with the url_title footer in _french_.
+// note that, by default, cms::render tries to resolve the page in the
+// language of Yii::app()->language:
+<? echo Cms::render('footer', 'fr'); ?>
+
+
+'httpCache', which requires at least yii 1.1.11 is enabled by default.
+It is recommended to activate the 'pageCache' when using a caching 
+component.
+Please also read CmsModule.php for additional configuration options.
+
+Feel free to contact me at:
+skype: herbertmaschke
+icq: 38541423
+email: thyseus@gmail.com
+yii-forum username: thyseus

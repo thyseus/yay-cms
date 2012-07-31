@@ -1,0 +1,1 @@
+<? echo $sitecontent->content; ?>
