@@ -351,15 +351,17 @@ class SitecontentController extends Controller
 					));
 	}
 
-	public function actionAdmin()
+	public function actionAdmin($preview = false)
 	{
 		$this->layout = Cms::module()->adminLayout;
+
 		$model=new Sitecontent('search');
 		if(isset($_GET['Sitecontent']))
 			$model->attributes=$_GET['Sitecontent'];
 
 		$this->render('admin',array(
 					'model'=>$model,
+					'preview'=>$preview,
 					));
 	}
 
