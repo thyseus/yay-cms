@@ -224,7 +224,7 @@ if(sitecontent_title_url == '' || sitecontent_title_url == value2)
     
             <div class="row">
                 <? echo $form->labelEx($model,'position'); ?>
-                <? for($i = 0; $i < 10; $i++) $position[] = $i; ?>
+                <? for($i = 0; $i <= 99; $i++) $position[] = $i; ?>
                 <? echo CHtml::dropDownList('Sitecontent[position]',
                         $model->position,
                         $position); ?>
