@@ -165,7 +165,7 @@ class Cms {
 				if($child->language == $lang)
 					$items[] = array(
 							'visible' => $child->isVisible(),
-							'active' => isset($_GET['page']) && Cms::isMenuPointActive($child, $_GET['page']),
+							'active' => isset($_GET['id']) && Cms::isMenuPointActive($child, $_GET['id']),
 							'label' => $child->title,
 							'url' => $child->getUrl($route),
 							);
@@ -203,7 +203,7 @@ public static function renderMenuPoints($id, $lang = null) {
 		foreach($sitecontent->childs as $child) {
 			printf('<li>%s</li>',
 					CHtml::link($child->title, array(
-							'/cms/sitecontent/view', 'page' => $child->title_url) ));
+							Cms::module()->sitecontentViewRoute, 'id' => $child->title_url)));
 		}
 		echo '</ul>';
 	}
