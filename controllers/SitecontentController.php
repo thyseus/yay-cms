@@ -114,9 +114,9 @@ class SitecontentController extends Controller
 		return $model->save();
 	}
 
-	public function actionView($ajax = false)
+	public function actionView($id, $lang = false, $ajax = false)
 	{
-		$model = $this->loadContent();
+		$model = $this->loadContent($id, $lang);
 
 		// is this page a redirection?
 		if($model->visible == 4 && $model->redirect !== null) 
@@ -172,7 +172,7 @@ class SitecontentController extends Controller
 	}
 
 	public function actionMoveImage($id, $language, $image, $direction) {
-		$sitecontent = $this->loadContent();
+		$sitecontent = $this->loadContent($id, $language);
 		if($sitecontent) {
 			$images = $sitecontent->images;
 
@@ -203,9 +203,12 @@ class SitecontentController extends Controller
 
 			$this->redirect( array(
 						Cms::module()->sitecontentUpdateRoute,
-						'page' => $sitecontent->title_url));
+						'id' => $sitecontent->title_url,
+						'lang' => $sitecontent->language,
+						));
 		}
 		throw new CHttpException(404);
+
 	}
 
 	public function checkPassword (&$model, $password, $password_repeat) {
@@ -252,7 +255,9 @@ class SitecontentController extends Controller
 				Cms::setFlash('The page has been created');
 				if(isset($_POST['yt0']))
 					$this->redirect(array(
-								'//cms/sitecontent/update', 'id' => $model->id));
+								'//cms/sitecontent/update',
+								'id' => $model->id,
+								'lang' => $model->language));
 				else
 					$this->redirect(array('admin'));
 			}
@@ -269,10 +274,11 @@ class SitecontentController extends Controller
 					));
 	}
 
-	public function actionUpdate()
+	public function actionUpdate($id, $lang = false)
 	{
 		$this->layout = Cms::module()->adminLayout;
-		$model=$this->loadContent();
+
+		$model = $this->loadContent($id, $lang);
 
 		$this->performAjaxValidation($model);
 
@@ -293,7 +299,14 @@ class SitecontentController extends Controller
 				Cms::setFlash('The page has been updated');
 				if(isset($_POST['yt0']))
 					$this->redirect(array(
-								'//cms/sitecontent/update', 'id' => $model->id));
+								Cms::module()->sitecontentUpdateRoute,
+								'id' => $model->id,
+								'lang' => $model->language));
+				else if(isset($_POST['yt1']))
+					$this->redirect(array(
+								Cms::module()->sitecontentViewRoute,
+								'id' => $model->id,
+								'lang' => $model->language));
 				else
 					$this->redirect(array('admin'));
 			}
@@ -330,16 +343,16 @@ class SitecontentController extends Controller
 			$this->redirect(array(
 						Cms::module()->sitecontentUpdateRoute,
 						'id' => $model_id,
-						'language' => $language));
+						'lang' => $language));
 
 		}	
 
 	}
 
-	public function actionDelete()
+	public function actionDelete($id, $lang)
 	{
 		if(Yii::app()->request->isPostRequest)
-			$this->loadContent()->delete();
+			$this->loadContent($id, $lang)->delete();
 		else
 			throw new CHttpException(400,Yii::t('App','Invalid request. Please do not repeat this request again.'));
 	}
@@ -392,24 +405,37 @@ class SitecontentController extends Controller
 					));
 	}
 
-	public function loadContent()
+	public function loadContent($id, $lang)
 	{
 		if($this->_model===null)
 		{
-			if(isset($_GET['id']) && is_array($_GET['id']))
-				$this->_model = Sitecontent::model()->find(
-						'id = :id and language = :language',  array(
-							':id' => $_GET['id']['id'],
-							':language' => $_GET['id']['language'],
-							));
-			if(isset($_GET['id']) && !is_array($_GET['id'])) 
-				$this->_model = Sitecontent::model()->find('id = :id',  array(
-							':id' => $_GET['id'],
-							));
+			$attr = is_numeric($id) ? 'id' : 'title_url';
 
-			if($this->_model === null && isset($_GET['page']))
-				$this->_model = Sitecontent::model()->find('title_url = :page', array(
-							':page' => $_GET['page']));
+			if(!$lang)
+				$lang = Cms::module()->defaultLanguage;
+
+			$this->_model = Sitecontent::model()->find(
+					$attr.' = :id and language = :language',  array(
+						':id' => $id,
+						':language' => $lang,
+						));
+
+			// fallback to default language
+			if($this->_model === null) {
+				$this->_model = Sitecontent::model()->find(
+						$attr.' = :id and language = :language',  array(
+							':id' => $id,
+							':language' => Cms::module()->defaultLanguage,
+							));
+				if($this->_model)
+					Cms::setFlash(
+							Cms::t(
+								'{title} not found in requested language {language_requested}. Falling back to {language_default} version.', array(
+									'{title}' => $this->_model->title,
+									'{language_requested}' => $lang,
+									'{language_default}' => Cms::module()->defaultLanguage,
+									)));
+			}	
 
 			if($this->_model===null)
 				throw new CHttpException(404,Cms::t(
@@ -420,7 +446,6 @@ class SitecontentController extends Controller
 			if(Yii::app()->user->isGuest && !$this->_model->isVisible()) 
 				throw new CHttpException(403, Cms::t(
 							'This page is not available to the public'));
-
 			else if(!Yii::app()->user->isGuest 
 					&& !$this->_model->isVisible())
 				throw new CHttpException(403, Cms::t(

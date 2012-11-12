@@ -275,6 +275,8 @@ if(sitecontent_title_url == '' || sitecontent_title_url == value2)
      <div class="row buttons">
 		 <? echo CHtml::submitButton(Yii::t('CmsModule.cms', 'Save'), array(
 					 'id' => 'submit-save')); ?> 
+		 <? echo CHtml::submitButton(Yii::t('CmsModule.cms', 'Save and view'), array(
+					 'id' => 'submit-view')); ?> 
 		 <? echo CHtml::submitButton(Yii::t('CmsModule.cms', 'Save and close'), array(
 					 'id' => 'submit-close')); ?> 
 

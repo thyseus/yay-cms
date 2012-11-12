@@ -131,7 +131,7 @@ class Sitecontent extends CActiveRecord
 		return $this;
 	}
 
-	public function listData() {
+	public static function listData() {
 		$listData = array();
 
 		$root = Sitecontent::model()->findAll('parent is NULL or parent = 0');

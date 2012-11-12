@@ -77,6 +77,9 @@ return array(
 		'Create' => 'Erstellen',
 		'Save' => 'Speichern',
 		'Save and close' => 'Speichern und schliessen',
+		'Save and view' => 'Speichern und anzeigen',
+		'Update {languages} version of {title}' => 'Bearbeite {title} in der Sprache {languages}',
+		'{title} not found in requested language {language_requested}. Falling back to {language_default} version.' => '{title} nicht in der angeforderten Sprache {language_requested} gefunden. Stattdessen wurde die Sprache {language_default} geladen.',
 		'Update' => 'Bearbeite',
 		'Site options' => 'Seitenoptionen',
 		);

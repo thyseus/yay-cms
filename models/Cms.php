@@ -76,6 +76,18 @@ class Cms {
 	}
 
 	public static function get($id = null, $lang = null, $render = false) {
+		if(Cms::module()->pageCache) {
+			$sitecontent=Yii::app()->cache->get('sitecontent_'.$id.'_'.$lang);
+
+			if($sitecontent===false) {
+				$sitecontent = Cms::retrieveContent($id, $lang, $render);
+				Yii::app()->cache->set('sitecontent_'.$id.'_'.$lang, $sitecontent);
+				return $sitecontent;
+			}
+		} else return Cms::retrieveContent($id, $lang, $render);
+	}
+
+	public static function retrieveContent($id, $lang, $render) {
 		if($lang === null)
 			$lang = Yii::app()->language;
 
@@ -101,10 +113,11 @@ class Cms {
 
 			if ($render && $sitecontent && !$sitecontent->isVisible())
 				throw new CHttpException(403);
-
-			if($sitecontent)
-				return $sitecontent->content;	
 		}
+
+		if($sitecontent)
+			return $sitecontent->content;	
+
 	}
 
 	public static function authDialog($label,

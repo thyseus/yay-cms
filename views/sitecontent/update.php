@@ -13,6 +13,18 @@ $this->menu=array(
 );
 ?>
 
-<h2><? echo Cms::t('Update');?> <? echo $model->title; ?></h2>
+<h2><? echo Cms::t('Update {languages} version of {title}', array(
+			'{languages}' => CHtml::dropDownList(
+				'languages', $model->language, Cms::module()->languages),
+			'{title}' => $model->title)); ?></h2>
+
+<? Yii::app()->clientScript->registerScript('dropdown_language', "
+		$('#languages').change(function() {
+			window.location='"
+			.$this->createUrl(
+				Cms::module()->sitecontentUpdateRoute, array(
+					'id' => $model->id))."' + '?lang=' + $(this).val();});
+		");
+?>
 
 <? echo $this->renderPartial('_form', array('model'=>$model)); ?>

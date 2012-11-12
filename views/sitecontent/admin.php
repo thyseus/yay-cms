@@ -1,22 +1,20 @@
 <?
 $this->breadcrumbs=array(
-		Cms::t('Sitecontent')=>array('index'),
+		Cms::t('Sitecontent')=>array(
+			Cms::module()->sitecontentAdminRoute),
 		Cms::t('Manage'),
 		);
 
 $this->menu=array(
 		array(
 			'label'=>Cms::t('Manage Sitecontent'), 
-			'url'=>array('sitecontent/admin')
+			'url'=>array(Cms::module()->sitecontentAdminRoute),
 			),
 		array(
 			'label'=>Cms::t('Create new Sitecontent'),
-			'url'=>array('create')),
+			'url'=>array(Cms::module()->sitecontentCreateRoute)),
 		);
-
-
 ?>
-
 
 <?= CHtml::beginForm(array(
 			Cms::module()->sitecontentAdminRoute), 'GET', array(
@@ -122,7 +120,12 @@ if($preview)
 $columns[] = array(
 					'class'=>'CButtonColumn',
 					'viewButtonUrl' => 'Yii::app()->controller->createUrl(
-						"//cms/sitecontent/view", array( "page" => $data->title_url))',
+						Cms::module()->sitecontentViewRoute, array( "id" => $data->id, "lang" => $data->language))',
+					'updateButtonUrl' => 'Yii::app()->controller->createUrl(
+						Cms::module()->sitecontentUpdateRoute, array( "id" => $data->id, "lang" => $data->language))',
+					'deleteButtonUrl' => 'Yii::app()->controller->createUrl(
+						Cms::module()->sitecontentDeleteRoute, array( "id" => $data->id, "lang" => $data->language))',
+
 					);
 
 $this->widget('application.modules.cms.components.CEditableGridView', array(

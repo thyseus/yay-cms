@@ -22,6 +22,7 @@ class CmsModule extends CWebModule
 
 	// Which languages do your cms serve?
 	public $languages = array('en' => 'English');
+	public $defaultLanguage = 'en';
 
 	// the 'language' metatag does not need to be listed here because it is
 	// automatically inserted out of the language of the sitecontent
@@ -49,6 +50,7 @@ class CmsModule extends CWebModule
 	public $sitecontentViewRoute = '//cms/sitecontent/view';
 	public $sitecontentCreateRoute = '//cms/sitecontent/create';
 	public $sitecontentUpdateRoute = '//cms/sitecontent/update';
+	public $sitecontentDeleteRoute = '//cms/sitecontent/delete';
 	public $sitecontentAdminRoute = '//cms/sitecontent/admin';
 	public $imageAdminRoute = '//cms/sitecontent/adminImages';
 
