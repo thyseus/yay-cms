@@ -155,5 +155,3 @@ table, td, th 				{vertical-align:middle;}
 .password { display: none; }
 
 .tooltip-content { display: none; font-size: 10px; height: 150px; width: 450px; color: black; background-color: lightblue; border: 1px solid white; border-radius: 5px; z-index: 1000; }
-.success { background-color: green; }
-.failure { background-color: red; }

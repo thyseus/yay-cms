@@ -98,6 +98,9 @@ class SitecontentController extends Controller
 		if(!Yii::app()->request->isAjaxRequest)
 			throw new CHttpException(403, Cms::t('This is not an ajax request'));
 
+		if(!isset($_POST['column']) || !isset($_POST['value']))
+			throw new CHttpException(400, Cms::t('Invalid request'));
+
 		$model = Sitecontent::model()->find(
 				'id = :id and language = :language', array(
 					'id' => $_POST['id'],

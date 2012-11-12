@@ -53,12 +53,14 @@ class CEditableGridView extends CGridView {
 					type: 'POST',
 					success: function() {
 					$('input.quickedit').each(function(i) {
-						$(this).addClass('success');
+						$(this).css('background-color', 'green');
+						$(this).css('color', 'black');
 						});
 					},
 error: function() {
 $('input.quickedit').each(function(i) {
-	$(this).addClass('failure');
+						$(this).css('background-color', 'red');
+
 	});
 },
 
@@ -76,7 +78,6 @@ Yii::app()->clientScript->registerScript('editable', "
 			language = $(this).parent('tr').children('td:first').next().next().html();
 			column = $(this).attr('rel');
 			element = '<input class=\"quickedit\" style=\"width:100%\" value=\"'+value+'\" type=text name=\"'+column+'_'+pk+'\" onblur=\"updateSitecontent(pk, language, column, value);\"></input>';
-
 			$(this).replaceWith(element);
 			});
 		", CClientScript::POS_END);
