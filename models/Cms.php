@@ -36,15 +36,15 @@ class Cms {
 
 	public static function renderFlash()
 	{
-		if(Cms::hasFlash()) {
-			echo '<div class="info">';
-			echo Cms::getFlash();
-			echo '</div>';
-			Yii::app()->clientScript->registerScript('fade',"
-					setTimeout(function() { $('.info').fadeOut('slow'); },
-						{$_SESSION['cms_delay']});	
-					"); 
-		}
+		if(Cms::hasFlash()) 
+			Yii::app()->controller->renderPartial(
+					'application.modules.cms.components.views.toastView',array(
+						'message'=>Cms::getFlash(),
+						'type'=>'warning',
+						'options'=>array(
+							'sticky'=>true,
+							'position'=>'top-right',
+							'stayTime'=>5000)),false,true);	
 	}
 
 	public static function module() {

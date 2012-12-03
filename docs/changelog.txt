@@ -1,7 +1,7 @@
 0.6 (to be released) 
 
 - yay-cms moved to Github
-- added 'preview mode' to sitecontent admin
+- added hallo.js support
 
 0.5 
 - start of changelog

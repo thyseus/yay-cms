@@ -3,11 +3,12 @@ Yii::setPathOfAlias('CmsAssets' , dirname(__FILE__) . '/assets/');
 
 class CmsModule extends CWebModule
 {
-	public $version = '0.6-dev';
+	public $version = '0.6';
 	public $adminLayout = 'application.modules.cms.views.layouts.cms';
 	public $layout = '//layouts/main';
 	public $dateformat = 'd.m.Y G:i:s';
 	public $enableHtmlPurifier = true;
+	public $enableHalloJs = true;
 	public $rtepath = false; // Don't use an Rich text Editor
 	public $rteadapter = false; // Don't use an Adapter
 	public $ckfinderpath = false; // do not use CKFinder
