@@ -19,7 +19,7 @@ class Cms {
 	/* retrieve the flash message again */
 	public static function getFlash() {
 		if(Cms::hasFlash()) {
-			$message = @$_SESSION['cms_message'];
+			$message = $_SESSION['cms_message'];
 			unset($_SESSION['cms_message']);
 			return $message;
 		}
@@ -42,9 +42,8 @@ class Cms {
 						'message'=>Cms::getFlash(),
 						'type'=>'warning',
 						'options'=>array(
-							'sticky'=>true,
 							'position'=>'top-right',
-							'stayTime'=>5000)),false,true);	
+							'stayTime'=>9000)),false,true);	
 	}
 
 	public static function module() {

@@ -1,32 +1,34 @@
-<?
+<style>
+#sitecontent-grid input { width: 50px !important; }
+#sitecontent-grid select { width: 50px !important; }
+</style>
+<?php
 $this->breadcrumbs=array(
 		Cms::t('Sitecontent')=>array(
 			Cms::module()->sitecontentAdminRoute),
 		Cms::t('Manage'),
 		);
+$this->pageTitle = Cms::t('Manage Sitecontent'); 
 
-$this->menu=array(
-		array(
-			'label'=>Cms::t('Manage Sitecontent'), 
-			'url'=>array(Cms::module()->sitecontentAdminRoute),
-			),
-		array(
-			'label'=>Cms::t('Create new Sitecontent'),
-			'url'=>array(Cms::module()->sitecontentCreateRoute)),
-		);
-?>
-
-<h2><? echo Cms::t('Manage Sitecontent'); ?></h2>
-<? 
 $columns = array(
+		array(
+			'class'=>'CButtonColumn',
+			'headerHtmlOptions' => array(
+				'style' => 'width:25px;',
+				),
+			'viewButtonUrl' => 'Yii::app()->controller->createUrl(
+				Cms::module()->sitecontentViewRoute, array( "id" => $data->id, "lang" => $data->language))',
+			'updateButtonUrl' => 'Yii::app()->controller->createUrl(
+				Cms::module()->sitecontentUpdateRoute, array( "id" => $data->id, "lang" => $data->language))',
+			'deleteButtonUrl' => 'Yii::app()->controller->createUrl(
+				Cms::module()->sitecontentDeleteRoute, array( "id" => $data->id, "lang" => $data->language))',
+			),
 		array(
 			'name' => 'id',
 			'headerHtmlOptions' => array(
 				'style' => 'width:25px;',
 				),
-			'htmlOptions' => array(
-				'class' => 'editable',
-				'rel' => 'id')),
+			),
 		array(
 			'name' => 'parent',
 			'value' => '$data->Parent ? $data->Parent->title_url : "-"',
@@ -36,18 +38,13 @@ $columns = array(
 				),
 			),
 		array(
-			'name' => 'language',
-			'filter' => Cms::module()->languages,
-			'headerHtmlOptions' => array(
-				'style' => 'width:25px;',
+				'name' => 'language',
+				'filter' => Cms::module()->languages,
+				'headerHtmlOptions' => array(
+					'style' => 'width:25px;',
+					),
 				),
-			'htmlOptions' => array(
-				'class' => 'editable',
-				'rel' => 'language')),
-		array('name' => 'title',
-				'htmlOptions' => array(
-					'class' => 'editable',
-					'rel' => 'title')),
+		array('name' => 'title'),
 		array(
 				'name' => 'title_url',
 				'type' => 'raw',
@@ -58,10 +55,6 @@ $columns = array(
 				'name' => 'position',
 				'headerHtmlOptions' => array(
 					'style' => 'width:5px;',
-					),
-				'htmlOptions' => array(
-					'class' => 'editable',
-					'rel' => 'position',
 					),
 				),
 		array(
@@ -95,25 +88,15 @@ $columns = array(
 					),
 				'htmlOptions' => array(
 					'rel' => 'tags',
-					'class' => 'editable',
 					),
 				),
 		);
 
-$columns[] = array(
-		'class'=>'CButtonColumn',
-		'viewButtonUrl' => 'Yii::app()->controller->createUrl(
-			Cms::module()->sitecontentViewRoute, array( "id" => $data->id, "lang" => $data->language))',
-		'updateButtonUrl' => 'Yii::app()->controller->createUrl(
-			Cms::module()->sitecontentUpdateRoute, array( "id" => $data->id, "lang" => $data->language))',
-		'deleteButtonUrl' => 'Yii::app()->controller->createUrl(
-			Cms::module()->sitecontentDeleteRoute, array( "id" => $data->id, "lang" => $data->language))',
-		);
-
-$this->widget('application.modules.cms.components.CEditableGridView', array(
+$this->widget('zii.widgets.grid.CGridView', array(
 			'id'=>'sitecontent-grid',
 			'dataProvider'=>$model->search(),
 			'template' => '{summary} {pager} {items} {pager}',
+			'htmlOptions' => array('class' => 'table table-condensed table-striped'),
 			'filter'=>$model,
 			'columns'=> $columns,
 			)); ?>
@@ -121,18 +104,4 @@ $this->widget('application.modules.cms.components.CEditableGridView', array(
 <? echo CHtml::link(
 		Cms::t('Create new Sitecontent'), array(
 			Cms::module()->sitecontentCreateRoute), array(
-			'tabindex' => 1)); ?>
-
-<?
-if(Cms::module()->enableTooltip) {
-	Yii::app()->clientScript->registerScriptFile(
-			Yii::app()->getAssetManager()->publish(
-				Yii::getPathOfAlias(
-					'application.modules.cms.assets').'/jquery.tooltip.js'));
-
-	Yii::app()->clientScript->registerScript(
-			'tooltip', "$('.tooltip').tooltip({
-position: 'center left',
-		offset: [10, 2]});");
-}
-?>
+			'tabindex' => 1, 'class' => 'btn')); ?>

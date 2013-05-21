@@ -4,5 +4,4 @@
 			'type'=>$type,
 			'options'=>$options
 			)); ?>
-
 <?php $this->endWidget(); ?>

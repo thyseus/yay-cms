@@ -6,8 +6,7 @@
 	if(Cms::module()->rtescript != false)
 		Yii::app()->clientScript->registerScript('rte_init', Cms::module()->rtescript);
 ?>
-<div class="form">
-	<? $form=$this->beginWidget('CActiveForm', array(
+	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id'=>'sitecontent-form',
 				'enableAjaxValidation'=>true,
 				'enableClientValidation'=>true,
@@ -18,107 +17,47 @@
 				));
 	?>
 
-	<? echo $form->errorSummary($model); ?>
+	<?php if($model->hasErrors()) { ?>
+	<div class="alert alert-error">
+	<?php echo $form->errorSummary($model); ?>
+	</div>
+	<?php } ?>
 
-	<div class="box-form-right">
-        <fieldset>
-            <legend><? echo Cms::t('Metatags'); ?></legend>
-            <?
-                $metatags = $model->metatags;
-                
-                if(!$metatags)
-                    $metatags = array();
-    
-                foreach(Cms::module()->allowedMetaTags as $metatag) {
-									echo '<div class="row">';
-									echo $form->labelEx($model, $metatag);	
-									$value = '';
-									if(isset($metatags[$metatag]))
-										$value = $metatags[$metatag];
+	<div class="row">
+	<div class="span6">
+	<fieldset><legend><?php echo Cms::t('Content'); ?></legend>
+	<? echo $form->textArea($model,'content', array('rows' => 20, 'class' => 'span6')); ?>
+	<? echo $form->error($model,'content'); ?>
 
-									if($value == '' && isset(Cms::module()->defaultMetaTags[$metatag]))
-										$value = Cms::module()->defaultMetaTags[$metatag];
-
-									echo CHtml::textField("Sitecontent[metatags][$metatag]", 
-											$value);
-									echo $form->error($model, $metatag);
-									echo '</div>';	
-                }
-            ?>
-        </fieldset>
-
-      <fieldset>
-            <legend><? echo Cms::t('Images'); ?></legend>
-            <?
-                $images = $model->images;
-                
-                if(!$images)
-                    $images = array();
-    
-										if($images && !$model->isNewRecord) {
-											echo '<table>';
-											foreach($images as $i => $image) {
-												printf(
-														'<tr><td>%s</td><td>%s</td><td>%s %s %s</td>',
-														Yii::app()->baseUrl . '/' . Cms::module()->imagePath. $image,
-														Cms::getImage($image, $image, true), 
-														count($images) > 1 ? CHtml::link('Up', array(
-																'//cms/sitecontent/moveImage',
-																'id' => $model->id,
-																'language' => $model->language,
-																'image' => $image,
-																'direction' => 'up')) : '',
-														count($images) > 1 ? CHtml::link('Down', array(
-																'//cms/sitecontent/moveImage',
-																'id' => $model->id,
-																'language' => $model->language,
-																'image' => $image,
-																'direction' => 'down')) : '',
-														CHtml::link(
-															CHtml::image(
-																Yii::app()->getAssetManager()->publish(
-																	Yii::getPathOfAlias(
-																		'zii.widgets.assets.gridview').'/delete.png')),
-															array(
-																'//cms/sitecontent/deleteImage',
-																'model_id' => $model->id,
-																'language' => $model->language,
-																'image' => $image),
-															array(
-																'confirm' => Cms::t(
-																	'Are you sure you want to delete this image?')
-																)
-															)
-														);
-
-									}
-									echo '</table>';
-								}			
-else echo Cms::t('No images yet');
-									
-									echo '<hr /><div class="row">';
-									echo $form->labelEx($model, 'image_new');	
-									echo CHtml::fileField('image_new', '');
-									echo $form->error($model, 'image_new');
-									echo '</div>';	
-
-            ?>
-        </fieldset>
-
-    </div>
-
-	<div class="box-form-left">
+	</fieldset>
+	
+	</div>
+	<div class="span3">
         <fieldset>
             <legend ><? echo Cms::t('Site options'); ?></legend>
             
-            <div class="row">
                 <? echo $form->labelEx($model,'id'); ?>
                 <? echo $form->textField($model,'id',array('size'=>5,'maxlength'=>11)); ?>
                 <? echo $form->error($model,'id'); ?>
-            </div>
+
+             <? echo $form->labelEx($model,'title'); ?>
+                <? echo $form->textField($model,'title',array('size'=>60,'maxlength'=>255)); ?>
+                <? echo $form->error($model,'title'); ?>
+    
+                <? echo $form->labelEx($model,'title_browser'); ?>
+                <? echo $form->textField($model,'title_browser',array('size'=>60,'maxlength'=>80)); ?>
+                <? echo $form->error($model,'title_browser'); ?>
+    
+                <? echo $form->labelEx($model,'title_url'); ?>
+                <? echo $form->textField($model,'title_url',array('size'=>60,'maxlength'=>80)); ?>
+                <? echo $form->error($model,'title_url'); ?>
+    
+                <? echo $form->labelEx($model,'language'); ?>
+                <? echo $form->dropDownList($model,'language',Cms::module()->languages); ?>
+                <? echo $form->error($model,'language'); ?>
     
 
-            <div class="row">
+
                 <? echo $form->labelEx($model,'parent'); ?>
                 <? echo CHtml::activeDropDownList($model,
                         'parent',
@@ -128,16 +67,13 @@ else echo Cms::t('No images yet');
                                 '0' => ' - ')));
                 ?>
                 <? echo $form->error($model,'header'); ?>
-            </div>
     
-            <div class="row">
                 <? echo $form->labelEx($model,'visible'); ?>
                 <? echo $form->dropDownList($model, 'visible', $model->itemAlias('visible')); ?>
                 <? echo $form->error($model,'visible'); ?>
-            </div>
     
     
-            <div class="row redirect" style="display: none;">
+            <div class="redirect" style="display: none;">
 						<? echo $form->labelEx($model,'redirect'); ?>
 						<? echo $form->dropDownList($model,'redirect',
 								CHtml::listData(Sitecontent::model()->findAll(), 'id', 'title'),
@@ -145,7 +81,7 @@ else echo Cms::t('No images yet');
 									'empty' => Cms::t('Absolute url')
 									)); ?>
 
-            <div class="row redirect_absolute" style="display: none;">
+            <div class="redirect_absolute" style="display: none;">
 						<? echo $form->labelEx($model,'redirect'); ?>
 						<? echo $form->textField($model,'redirect',array(
 									'id' => 'Sitecontent_redirect_absolute',
@@ -155,11 +91,11 @@ else echo Cms::t('No images yet');
 						<? echo $form->error($model,'redirect'); ?>
 						</div>
 
-            <div class="row password" style="display: none;">
+            <div class="password" style="display: none;">
                 <? echo $form->labelEx($model,'password'); ?>
                 <? echo $form->passwordField($model, 'password'); ?>
             </div>    
-           	<div class="row password" style="display: none;">
+           	<div class="password" style="display: none;">
             	<? echo $form->labelEx($model,'password_repeat'); ?>
                 <? echo $form->passwordField($model, 'password_repeat'); ?>
                 <div class="hint">
@@ -222,64 +158,123 @@ if(sitecontent_title_url == '' || sitecontent_title_url == value2)
 ");
             ?>
     
-            <div class="row">
                 <? echo $form->labelEx($model,'position'); ?>
                 <? for($i = 0; $i <= 99; $i++) $position[] = $i; ?>
                 <? echo CHtml::dropDownList('Sitecontent[position]',
                         $model->position,
                         $position); ?>
                 <? echo $form->error($model,'position'); ?>
-            </div>
     
-            <div class="row">
-                <? echo $form->labelEx($model,'title'); ?>
-                <? echo $form->textField($model,'title',array('size'=>60,'maxlength'=>255)); ?>
-                <? echo $form->error($model,'title'); ?>
-            </div>
-    
-            <div class="row">
-                <? echo $form->labelEx($model,'title_browser'); ?>
-                <? echo $form->textField($model,'title_browser',array('size'=>60,'maxlength'=>80)); ?>
-                <? echo $form->error($model,'title_browser'); ?>
-            </div>
-    
-            <div class="row">
-                <? echo $form->labelEx($model,'title_url'); ?>
-                <? echo $form->textField($model,'title_url',array('size'=>60,'maxlength'=>80)); ?>
-                <? echo $form->error($model,'title_url'); ?>
-            </div>
-    
-            <div class="row">
-                <? echo $form->labelEx($model,'language'); ?>
-                <? echo $form->dropDownList($model,'language',Cms::module()->languages); ?>
-                <? echo $form->error($model,'language'); ?>
-            </div>
-    
-            <div class="row">
-                <? echo $form->labelEx($model,'content'); ?>
-                <? echo $form->textArea($model,'content',array('rows'=>6, 'cols'=>50)); ?>
-                <? echo $form->error($model,'content'); ?>
-            </div>
+                     
+        </fieldset>
 
-            <div class="row">
-                <? echo $form->labelEx($model,'tags'); ?>
+	</div>
+	<div class="span3">
+
+        <fieldset>
+            <legend><? echo Cms::t('Metatags'); ?></legend>
+            <?
+                $metatags = $model->metatags;
+                
+                if(!$metatags)
+                    $metatags = array();
+    
+                foreach(Cms::module()->allowedMetaTags as $metatag) {
+									echo $form->labelEx($model, $metatag);	
+									$value = '';
+									if(isset($metatags[$metatag]))
+										$value = $metatags[$metatag];
+
+									if($value == '' && isset(Cms::module()->defaultMetaTags[$metatag]))
+										$value = Cms::module()->defaultMetaTags[$metatag];
+
+									echo CHtml::textField("Sitecontent[metatags][$metatag]", 
+											$value);
+									echo $form->error($model, $metatag);
+                }
+            ?>
+        </fieldset>
+
+			<fieldset><legend>Tags</legend>
+          <? echo $form->labelEx($model,'tags'); ?>
                 <? echo $form->textField($model,'tags',array('size'=>60,'maxlength'=>255)); ?>
                 <? echo $form->error($model,'tags'); ?>
-            </div>
+			</fieldset>
 
+
+      <fieldset>
+            <legend><? echo Cms::t('Images'); ?></legend>
+            <?
+                $images = $model->images;
+                
+                if(!$images)
+                    $images = array();
     
+										if($images && !$model->isNewRecord) {
+											echo '<table>';
+											foreach($images as $i => $image) {
+												printf(
+														'<tr><td>%s</td><td>%s</td><td>%s %s %s</td>',
+														Yii::app()->baseUrl . '/' . Cms::module()->imagePath. $image,
+														Cms::getImage($image, $image, true), 
+														count($images) > 1 ? CHtml::link('Up', array(
+																'//cms/sitecontent/moveImage',
+																'id' => $model->id,
+																'language' => $model->language,
+																'image' => $image,
+																'direction' => 'up')) : '',
+														count($images) > 1 ? CHtml::link('Down', array(
+																'//cms/sitecontent/moveImage',
+																'id' => $model->id,
+																'language' => $model->language,
+																'image' => $image,
+																'direction' => 'down')) : '',
+														CHtml::link(
+															CHtml::image(
+																Yii::app()->getAssetManager()->publish(
+																	Yii::getPathOfAlias(
+																		'zii.widgets.assets.gridview').'/delete.png')),
+															array(
+																'//cms/sitecontent/deleteImage',
+																'model_id' => $model->id,
+																'language' => $model->language,
+																'image' => $image),
+															array(
+																'confirm' => Cms::t(
+																	'Are you sure you want to delete this image?')
+																)
+															)
+														);
+
+									}
+									echo '</table>';
+								}			
+else echo Cms::t('No images yet');
+									
+									echo '<hr />';
+									echo $form->labelEx($model, 'image_new');	
+									echo CHtml::fileField('image_new', '');
+									echo $form->error($model, 'image_new');
+
+            ?>
+
         </fieldset>
-    </div>
-    
-    <div class="clear"></div>
-     <div class="row buttons">
+
+
+	</div>
+
+
+	</div>
+
+
+    <div class="clearfix"></div>
+     <div class="buttons">
 		 <? echo CHtml::submitButton(Yii::t('CmsModule.cms', 'Save'), array(
-					 'id' => 'submit-save')); ?> 
+					 'id' => 'submit-save', 'class' => 'btn')); ?> 
 		 <? echo CHtml::submitButton(Yii::t('CmsModule.cms', 'Save and view'), array(
-					 'id' => 'submit-view')); ?> 
+					 'id' => 'submit-view', 'class' => 'btn')); ?> 
 		 <? echo CHtml::submitButton(Yii::t('CmsModule.cms', 'Save and close'), array(
-					 'id' => 'submit-close')); ?> 
+					 'id' => 'submit-close', 'class' => 'btn')); ?> 
 
             </div>
-    <? $this->endWidget(); ?>
-</div><!-- form -->
+    <?php $this->endWidget(); ?>

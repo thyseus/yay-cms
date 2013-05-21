@@ -13,10 +13,10 @@ $this->menu=array(
 );
 ?>
 
-<h2><? echo Cms::t('Update {languages} version of {title}', array(
+<h3><? echo Cms::t('Update {languages} version of {title}', array(
 			'{languages}' => CHtml::dropDownList(
 				'languages', $model->language, Cms::module()->languages),
-			'{title}' => $model->title)); ?></h2>
+			'{title}' => $model->title)); ?></h3>
 
 <? Yii::app()->clientScript->registerScript('dropdown_language', "
 		$('#languages').change(function() {

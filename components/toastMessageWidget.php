@@ -38,7 +38,7 @@ close:            null    // callback function when the toastmessage is closed
 	public function init(){
 		$publishPath = Yii::app()->getAssetManager()->publish(
 				Yii::getPathOfAlias(
-					'application.modules.cms.assets.toast'), false, 5);
+					'application.modules.cms.assets.toast'), false);
 		Yii::app()->clientScript->registerScriptFile($publishPath.'/jquery.toastmessage.js');
 		Yii::app()->clientScript->registerCssFile($publishPath.'/jquery.toastmessage.css');
 

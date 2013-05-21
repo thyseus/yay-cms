@@ -1,4 +1,4 @@
-<?
+<?php
 Yii::setPathOfAlias('CmsAssets' , dirname(__FILE__) . '/assets/');   
 
 class CmsModule extends CWebModule
@@ -12,6 +12,7 @@ class CmsModule extends CWebModule
 	public $rtepath = false; // Don't use an Rich text Editor
 	public $rteadapter = false; // Don't use an Adapter
 	public $ckfinderpath = false; // do not use CKFinder
+	public $enableBootstrap = true;
 
 	/* Script snippet to be executed. Examples are:
 		 tinyMCE.init({ mode : "textareas", theme : "simple" }); ',

@@ -1,17 +1,13 @@
 <?
 
 Yii::import('application.modules.cms.models.Sitecontent');
-class SitecontentController extends Controller
+Yii::import('application.modules.cms.controllers.CmsController');
+
+class SitecontentController extends CmsController
 {
 	public $defaultAction='admin';
 	public $pageTitle = '';
 	private $_model;
-
-	public function beforeAction($action)
-	{
-		$this->layout = Cms::module()->layout;
-		return true;
-	}
 
 	public function actionSearch($search = null) 
 	{
@@ -154,8 +150,7 @@ class SitecontentController extends Controller
 				$this->renderPartial(Cms::module()->sitecontentViewFile, array(
 							'sitecontent' => $model,
 							));
-		}
-		else {
+		} else {
 			if(Cms::module()->pageCache
 					&& $this->beginCache('yiicms_'.$model->id, array(
 							'dependency'=>array(
@@ -410,8 +405,7 @@ class SitecontentController extends Controller
 
 	public function loadContent($id, $lang)
 	{
-		if($this->_model===null)
-		{
+		if($this->_model === null) {
 			$attr = is_numeric($id) ? 'id' : 'title_url';
 
 			if(!$lang)

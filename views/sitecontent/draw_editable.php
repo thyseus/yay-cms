@@ -2,19 +2,19 @@
 echo CHtml::link(Cms::t('Edit this sitecontent'), array(
 			Cms::module()->sitecontentUpdateRoute,
 			'id' => $sitecontent->id,
-			'lang' => $sitecontent->language));
+			'lang' => $sitecontent->language), array('class' => 'btn'));
 echo '<div style="clear: both;"></div>';
 
 if(Cms::module()->enableHalloJs) 
 	echo '<div class="editable">';
 echo $sitecontent->content; 
 if(Cms::module()->enableHalloJs) 
-	echo '</div';
+	echo '</div>';
 echo '<div style="clear: both;"></div>';
 echo CHtml::link(Cms::t('Edit this sitecontent'), array(
 			Cms::module()->sitecontentUpdateRoute,
 			'id' => $sitecontent->id,
-			'lang' => $sitecontent->language));
+			'lang' => $sitecontent->language), array('class' => 'btn'));
 
 if(Cms::module()->enableHalloJs) {
 	Yii::app()->clientScript->registerCoreScript('jquery.ui');
@@ -49,7 +49,7 @@ data: {
 	'value': $('.editable').html(),
 }, 
 success: function() {
-	$().toastmessage('showSuccessToast', 'Content has been saved', {
+	$().toastmessage('showSuccessToast', '".Cms::t('Content has been saved')."', {
 'stayTime': 1000,
 'inEffectDuration': 100,
 'sticky': false,
@@ -57,7 +57,7 @@ success: function() {
 
 },
 error: function() {
-	$().toastmessage('showErrorToast', 'Error while saving content !', {
+	$().toastmessage('showErrorToast', '".Cms::t('Error while saving content')."', {
 	'sticky': true,
 });
 }
@@ -77,16 +77,16 @@ jQuery('.editable').hallo({plugins: {
 lastsave = 0;
 jQuery('.editable').bind('hallodeactivated', function() {saveContent();});
 
-// auto-save all 10 seconds
+// auto-save all 30 seconds
 jQuery('.editable').bind('hallomodified', function(event, data) {
 var d = new Date();
 var currenttime = d.getTime();
 var interval = currenttime - lastsave;
-if(interval >= 10000) {
+if(interval >= 30000) {
 	lastsave = currenttime;
 	saveContent();
 }
 }); 
-");
+", CClientScript::POS_END);
 }
 ?>

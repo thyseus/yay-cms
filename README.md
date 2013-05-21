@@ -8,9 +8,11 @@ can be easily extended for your project-specific needs.
   * Just one database table where all content goes
   * Hierarchical Menu structure with infinite depth
   * Menu rendering inclusive
-  * Includes demo layout, but can be integrated in your existing Yii application layout
+  * Includes demo layout based on bootstrap, but can be integrated 
+		in your existing Yii application layout
 
-Please note that features like authentication, access right, language support all is NOT included. 
+Please note that features like authentication, access right, language 
+support all is NOT included. 
 
 This is the task of other modules. 
 
